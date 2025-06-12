@@ -1,0 +1,64 @@
+version: '3.7'
+
+services:
+
+  pgvector:
+    image: ankane/pgvector:latest
+    restart: always
+    environment:
+      POSTGRES_USER: n8n
+      POSTGRES_PASSWORD: n8n_password
+      POSTGRES_DB: n8n
+    volumes:
+      - postgres-vector-data:/var/lib/postgresql/data
+    networks:
+      - n8n-network
+
+  postgres:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: n8n
+      POSTGRES_PASSWORD: n8n_password
+      POSTGRES_DB: n8n
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - n8n-network
+
+  n8n:
+    image: n8nio/n8n:latest
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=admin_password
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - VUE_APP_URL_BASE_API=http://localhost:5678/
+      - GENERIC_TIMEZONE=America/Santiago
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=n8n
+      - DB_POSTGRESDB_USER=n8n
+      - DB_POSTGRESDB_PASSWORD=n8n_password
+      - NODE_ENV=development
+    depends_on:
+      - postgres
+    volumes:
+      - n8n-data:/home/node/.n8n
+    networks:
+      - n8n-network
+
+volumes:
+  postgres-data:
+  postgres-vector-data:
+  n8n-data:
+
+networks:
+  n8n-network:
+    driver: bridge
