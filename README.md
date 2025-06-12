@@ -112,8 +112,8 @@ sudo usermod -aG docker $USER
 
 ### 1. Clona o descarga el proyecto
 ```bash
-git clone <url-del-repositorio>
-cd n8n-orion
+git clone git@github.com:orion-global/n8n-local.git
+cd n8n-local
 ```
 
 ### 2. Verifica la instalación de Docker
