@@ -112,7 +112,7 @@ sudo usermod -aG docker $USER
 
 ### 1. Clona o descarga el proyecto
 ```bash
-git clone git@github.com:orion-global/n8n-local.git
+git clone https://github.com/orion-global/n8n-local.git
 cd n8n-local
 ```
 
